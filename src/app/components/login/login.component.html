@@ -1,0 +1,17 @@
+<div class="center">
+    <form class="box" #loginUsuario="ngForm" (ngSubmit)="login()">
+        <br>
+        <h1>Login</h1>
+        <input type="text" placeholder="id" #_id="ngModel" [(ngModel)]="user.id" name="id" required />
+        <input type="password" placeholder="password" #password="ngModel" [(ngModel)]="user.password" name="password" required />
+        
+        <input type="text" placeholder="role" #rol="ngModel" [(ngModel)]="user.role" name="role" required />
+        <!--<select type="op">
+            <option>usuario</option>
+            <option>supervisor</option>
+            <option>administrator</option>
+        </select>-->
+        <button type="submit">Login</button>
+        <!--<app-dashboard [userLog]="user"></app-dashboard>-->
+    </form>
+</div>
