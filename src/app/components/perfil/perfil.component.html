@@ -1,0 +1,28 @@
+<body>
+    <div class="card">
+        <img class="card-img" src="https://toppng.com/uploads/preview/user-account-management-logo-user-icon-11562867145a56rus2zwu.png">
+        <br>
+        <h2 class="card-title">Perfil del usuario</h2>
+        <div>
+            <p><strong>Nombre</strong>: {{usuarios.username}}</p>
+            <br>
+            <p><strong>Username</strong>: Maria01</p>
+            <br>
+            <p><strong>Rol</strong>: usuario</p>
+            <br>
+            <p><strong>Departamento:</strong> AS</p>
+            <br>
+            <p><strong>Id</strong>:1 </p>
+            <br>
+            <p><strong>Id Superior</strong>: 2</p>
+            
+        </div>
+        <br><br>
+        <button><a (click)="return()" >Return</a></button>
+        <button><a [routerLink]="['./editar-perfil']" [routerLinkActive]="['active']" >Editar</a></button>
+        <button><a (click)="delete()">Eliminar</a></button>
+    </div>
+
+    <img class="pic" src="https://images.unsplash.com/photo-1575573550252-4bea31b9d485?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"> 
+
+</body>
