@@ -1,17 +1,25 @@
 <div class="center">
-    <form class="box" #loginUsuario="ngForm" (ngSubmit)="login()">
+    <form class="box" #formulario="ngForm" (ngSubmit)="login()">
         <br>
         <h1>Login</h1>
-        <input type="text" placeholder="id" #_id="ngModel" [(ngModel)]="user.id" name="id" required />
-        <input type="password" placeholder="password" #password="ngModel" [(ngModel)]="user.password" name="password" required />
+        <input type="text" placeholder="id" [(ngModel)]="userModulo.id" [ngModelOptions]="{standalone: true}" required />
+        <input type="password" placeholder="password" [(ngModel)]="userModulo.password" [ngModelOptions]="{standalone: true}" required />
         
-        <input type="text" placeholder="role" #rol="ngModel" [(ngModel)]="user.role" name="role" required />
-        <!--<select type="op">
-            <option>usuario</option>
-            <option>supervisor</option>
-            <option>administrator</option>
-        </select>-->
+        <input type="text" placeholder="role" [(ngModel)]="userModulo.role" [ngModelOptions]="{standalone: true}" required />
+       
         <button type="submit">Login</button>
-        <!--<app-dashboard [userLog]="user"></app-dashboard>-->
+        
     </form>
+
+    
 </div>
+<h2>Depurando mascota:</h2>
+{{ userModulo | json }}
+<!--
+     <input type="text" placeholder="id" #_id="ngModel"
+        [(ngModel)]="user.id" [ngModelOptions]="{standalone: true}" 
+        formControlName="id" required />
+        <input type="password" placeholder="password" #password="ngModel" [(ngModel)]="user.password" [ngModelOptions]="{standalone: true}" name="password" required />
+        
+        <input type="text" placeholder="role" #rol="ngModel" [(ngModel)]="user.role" [ngModelOptions]="{standalone: true}" name="role" required />
+-->
