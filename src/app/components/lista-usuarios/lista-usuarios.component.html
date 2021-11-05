@@ -4,22 +4,10 @@
 
 <h2 class="sub-header">Lista de empleados</h2>
 
-  <article *ngFor="let usuario of usuarios">
-    <h3>{{usuario.firstname}}</h3>
-    <app-usuarios [usuario]="usuario"></app-usuarios>
-  </article>
   
-  
-  <div id="articles" *ngIf="usuarios">
-    <div *ngFor="let usuario of usuarios">
-      <app-usuarios [usuario]="usuario">
-
-      </app-usuarios>
-    </div>
-  </div>
           <div class="table-responsive">
 
-            <table class="table table-striped" *ngFor="let usuario of usuarios">
+            <table class="table table-striped">
 
               <thead>
 
@@ -35,28 +23,12 @@
 
               <tbody>
 
-                <tr>
-                  <td>{{usuario._id}}</td>
-                  <td>{{usuario.firstname}}</td>
-                  <td>{{usuario.rol}}</td>
-                  <td>{{usuario.username}}</td>
-                  <td>{{usuario.department}}</td>
-                </tr>
-
-                <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
-                </tr>
-
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
+                <tr *ngFor="let user of listaUsuario">
+                  <td>{{user.id}}</td>
+                  <td>{{user.firstname}}</td>
+                  <td>{{user.rol}}</td>
+                  <td>{{user.username}}</td>
+                  <td>{{user.departmento}}</td>
                 </tr>
             </tbody>
         </table>
