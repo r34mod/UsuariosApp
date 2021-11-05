@@ -1,25 +1,25 @@
 <body>
-    <div class="card">
+    <div class="card" *ngFor="let user of listaUsuario">
         <img class="card-img" src="https://toppng.com/uploads/preview/user-account-management-logo-user-icon-11562867145a56rus2zwu.png">
         <br>
         <h2 class="card-title">Perfil del usuario</h2>
         <div>
-            <p><strong>Nombre</strong>: {{usuarios.username}}</p>
+            <p><strong>Nombre</strong>: {{listaUsuario[3]}}</p>
             <br>
-            <p><strong>Username</strong>: Maria01</p>
+            <p><strong>Username</strong>: {{listaUsuario[2]}}</p>
             <br>
-            <p><strong>Rol</strong>: usuario</p>
+            <p><strong>Rol</strong>: {{listaUsuario[4]}}</p>
             <br>
-            <p><strong>Departamento:</strong> AS</p>
+            <p><strong>Departamento:</strong> {{listaUsuario[7]}}</p>
             <br>
-            <p><strong>Id</strong>:1 </p>
+            <p><strong>Id</strong>: {{listaUsuario[1]}} </p>
             <br>
-            <p><strong>Id Superior</strong>: 2</p>
+            <p><strong>Id Superior</strong>: {{listaUsuario[0]}}</p>
             
         </div>
         <br><br>
         <button><a (click)="return()" >Return</a></button>
-        <button><a [routerLink]="['./editar-perfil']" [routerLinkActive]="['active']" >Editar</a></button>
+        <button><a (click)="verEditarPerfil()" >Editar</a></button>
         <button><a (click)="delete()">Eliminar</a></button>
     </div>
 

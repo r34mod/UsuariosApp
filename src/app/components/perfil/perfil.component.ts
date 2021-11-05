@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ListaUsuarios } from 'src/app/models/usuario.interface';
+import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from '../../models/usuario';
 import { UsuarioService } from '../../services/user.service';
 
@@ -11,91 +13,125 @@ import { UsuarioService } from '../../services/user.service';
 })
 export class PerfilComponent implements OnInit {
 
+  url!:'http://localhost:8080/';
   public variable!:any;
+  listaUsuario!: ListaUsuarios[];
   @Input() usuarios!: Usuario;
   //public user!: Usuario;
   constructor(
     private _usuarioService: UsuarioService,
     private _route: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    private authen: AuthService
   ) { }
 
   ngOnInit(): void {
-    /*this._usuarioService.getUserByUsername(1).subscribe(
-      response => {
-        if(response.user){
-          this.user = response.user;
-        }else{
-          
-        }
+    
+
+    if(this.authen.logUser===true){
+      let usuarioRol = getUsuario();
+      let usuarioId = getId();
+
+      switch(usuarioRol){
+        case 'usuarios':
+          this._usuarioService.getUserByUsername(parseInt(usuarioId)).subscribe(response =>{
+            console.log(response);
+            //this.listaUsuario = response;
+            this.listaUsuario = Object.values(response);
+           
+            console.log(this.listaUsuario[3])
+           
+            });
+            break;
+        case 'supervisores':
+          this._usuarioService.getSuperUserByUsername(parseInt(usuarioId)).subscribe(response =>{
+            //this.listaUsuario = response;
+            this.listaUsuario = Object.values(response);
+            console.log(this.listaUsuario[3])
+            });
+          break;
+        case 'administradores':
+          this._usuarioService.getAdminByUsername(parseInt(usuarioId)).subscribe(response =>{
+            this.listaUsuario = Object.values(response);
+            });
+          break;
       }
-    )*/
+    }else{
+      alert("Not token valid");
+      this._router.navigateByUrl(this.url);
+    }
   }
 
   return(){
-    var cad = separarURL(this._router);
-    console.log(cad);
-    this._router.navigate(['/dashboard'+'/'+cad[2]+'/'+cad[3]]);
+    this._router.navigate(['/dashboard']);
   }
 
   getUsuarioLog(){
-    var cad = separarURL(this._router);
-    switch(cad[2]){
+    let usuarioRol = getUsuario();
+    let usuarioId = getId();
+    switch(usuarioRol){
       case 'usuarios':
-        this._usuarioService.getUserByUsername(parseInt(cad[3])).subscribe(response =>{
-          this.usuarios = response;
-          this.variable = response;
-
-          let datos = separarComas(JSON.stringify(this.variable));
-          let misDatos = devuelvoDatos(datos[0]);
-          this.usuarios.firstname = misDatos[0];
+        this._usuarioService.getUserByUsername(parseInt(usuarioId)).subscribe(response =>{
+          this.listaUsuario = response;
+          console.log('lista'+this.listaUsuario)
+          let result = [];
+          //console.log(this.listaUsuario);
+          for(var i in this.listaUsuario) {
+            result.push([i, this.listaUsuario[i]]);
+          }
+          console.log('lol'+result);
           });
           break;
       case 'supervisores':
-        this._usuarioService.getSuperUserByUsername(parseInt(cad[3])).subscribe(response =>{
-          this.usuarios = response.usuarios;
-          this.variable = response;
-
-          let datos = separarComas(JSON.stringify(this.variable));
-          let misDatos = devuelvoDatos(datos[0]);
-          this.usuarios.firstname = misDatos[0];
-        });
+        this._usuarioService.getSuperUserByUsername(parseInt(usuarioId)).subscribe(response =>{
+          this.listaUsuario = response;
+          let result = [];
+          //console.log(this.listaUsuario);
+          for(var i in this.listaUsuario) {
+            result.push([i, this.listaUsuario[i]]);
+          }
+          console.log(result);
+          });
         break;
       case 'administradores':
-        this._usuarioService.getAdminByUsername(parseInt(cad[3])).subscribe(response =>{
-          this.usuarios = response.usuarios;
-          this.variable = response;
-
-          let datos = separarComas(JSON.stringify(this.variable));
-          let misDatos = devuelvoDatos(datos[0]);
-          this.usuarios.firstname = misDatos[0];
-        });
+        this._usuarioService.getAdminByUsername(parseInt(usuarioId)).subscribe(response =>{
+          this.listaUsuario = response;
+          let result = [];
+          //console.log(this.listaUsuario);
+          for(var i in this.listaUsuario) {
+            result.push([i, this.listaUsuario[i]]);
+          }
+          console.log(result);
+          });
         break;
     }
   }
 
   delete(): void{
-    var cad = separarURL(this._router);
-    switch(cad[2]){
+    var cad = getUsuario();
+    let usuarioId = getId();
+    switch(cad){
       case 'usuarios':
         alert('No tienes rol autorizado');
-        this._router.navigate(['/dashboard'+'/'+cad[2]+'/'+cad[3]]);
+        this._router.navigate(['/dashboard']);
         break;
       case 'supervisores':
-        this._usuarioService.delete(parseInt(cad[3])).subscribe(
+        this._usuarioService.delete(parseInt(usuarioId)).subscribe(
           response => {
           
-            this._router.navigate(['/dashboard'+'/'+cad[2]+'/'+cad[3]]);
-            alert('Usuario eliminado');
+            this._router.navigate(['/loader']);
+            
+            
           }, error => {
     
           }
         );
         break;
       case 'administradores':
-        this._usuarioService.delete(parseInt(cad[3])).subscribe(response =>{
-          this._router.navigate(['/dashboard'+'/'+cad[2]+'/'+cad[3]]);
-          alert('Usuario eliminado');
+        this._usuarioService.delete(parseInt(usuarioId)).subscribe(response =>{
+          this._router.navigate(['/loader']);
+          
+            
         }, error => {
 
         })
@@ -103,7 +139,37 @@ export class PerfilComponent implements OnInit {
     
   }
 
+  verEditarPerfil(){
+    var cad = getUsuario();
+    switch (cad){
+      case 'usuarios':
+        alert("No tienes un rol autorizado");
+        this._router.navigateByUrl('/dashboard/perfil');
+        break;
+      case 'supervisores':
+        this._router.navigateByUrl('/editar-perfil');
+        break;
+      case 'administradores':
+        this._router.navigateByUrl('/editar-perfil');
+        break;
+    }
+  }
+
 }
+
+
+function getUsuario():string{
+  return decMD5(String(localStorage.getItem('usuario')));
+ }
+ 
+ function getId():string{
+   return decMD5(String(localStorage.getItem('idUsuario')));
+ }
+ 
+ 
+ function decMD5(cad:any){
+   return decodeURIComponent(escape(window.atob(cad)));
+ }
 
 function separarURL(_router: Router) {
   let direccion = _router.url;

@@ -10,7 +10,7 @@
 body 
 {
     background-color: white;
-    color: white;
+    color: black;
     font-family: 'Noto Sans JP', sans-serif;
     display: flex;
     flex-direction: column;
