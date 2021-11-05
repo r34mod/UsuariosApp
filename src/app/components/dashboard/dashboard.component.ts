@@ -5,6 +5,8 @@ import { Usuario } from 'src/app/models/usuario';
 import { UserLog } from 'src/app/models/userLog';
 import { User } from 'src/app/models/user';
 import { UsuarioService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { ListaUsuarios } from 'src/app/models/usuario.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,17 +18,20 @@ export class DashboardComponent implements OnInit {
 
   //@Input() userLog!: UserLog;
 
+  url!:'http://localhost:8080/';
   
   @Input() usuarios!: Usuario;
   public variable!:any;
   
+  listaUsuario!:ListaUsuarios[];
   public myArr!:any[];
   //public usuarios?: Usuario;
   public users?: User[];
   constructor(
     private _usuarioService: UsuarioService,
     private _route: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    private authen: AuthService
   ) { 
 
     //Tenemos la informacion de la url
@@ -39,163 +44,159 @@ export class DashboardComponent implements OnInit {
   
   
   ngOnInit(): void {
-   
-    //this.getUsuarioLog();
-   
-    var cad = separarURL(this._router);
-    //cad[0] => id 
-    //cad[1] => rol
-    console.log(cad[0]);
-    switch (cad[1]) {
-      case 'usuarios':
-        this._usuarioService.getUserByUsername(parseInt(cad[0])).subscribe(response => {
-          this.usuarios = response.usuarios;
-          this.variable = response;
-          
-          let datos = separarComas(JSON.stringify(this.variable));
-          console.log(this.variable);
-          console.log(datos[0]);
-          console.log(devuelvoDatos(datos[0]));
-          let misDatos = devuelvoDatos(datos[0]);
-          this.usuarios.firstname = misDatos[0];
-        });
-        break;
-      case 'supervisores':
-        this._usuarioService.getSuperUserByUsername(parseInt(cad[0])).subscribe(response =>{
-          this.usuarios = response.usuarios;
-          this.variable = response;
-          let datos = separarComas(JSON.stringify(this.variable));
-          let misDatos = devuelvoDatos(datos[0]);
-          this.usuarios.firstname = misDatos[0];
-          console.log(response);
-        })
-        break;
-      case 'administradores':
-        this._usuarioService.getAdminByUsername(parseInt(cad[0])).subscribe(response =>{
-          this.usuarios = response.usuarios;
-          this.variable = response;
-          let datos = separarComas(JSON.stringify(this.variable));
-          let misDatos = devuelvoDatos(datos[0]);
-          this.usuarios.firstname = misDatos[0];
-        })
-        break;
+    if(localStorage.getItem('auth_token')===null){
+      this._router.navigateByUrl(this.url);
     }
-     
-    
+    console.log('djdj');
+    if(this.authen.logUser===true){
+      let rolUsuario = getUsuario();
+      this.getInfoUser();
+      if(rolUsuario=='usuarios'){
+        this._usuarioService.getAllUsers().subscribe(data => {
+          this.listaUsuario = data;
+        });
+      }else if(rolUsuario== 'administradores'){
+        this._usuarioService.getAdministrador().subscribe(data => {
+          this.listaUsuario = data;
+        });
+      }else if(rolUsuario== 'supervisores'){
+        this._usuarioService.getSupervisores().subscribe(data => {
+          this.listaUsuario = data;
+        });
+      }
+      
+    }else{
+      alert("No estas logueado");
+      this._router.navigateByUrl(this.url);
+    }
+   
 
+  }
 
-    
+  getInfoUser():void  {
+    let rolUsuario = getUsuario();
+      let idUsuario = getId();
+      switch(rolUsuario){
+        case 'usuarios':
+          this._usuarioService.getUserByUsername(parseInt(idUsuario)).subscribe(response => {
+            this.listaUsuario = Object.values(response);
+            console.log(this.listaUsuario[3]);
+          });
+          break;
+        case 'supervisores':
+          this._usuarioService.getSuperUserByUsername(parseInt(idUsuario)).subscribe(response => {
+            this.listaUsuario = Object.values(response);
+          });
+          break;
+        case 'administradores':
+          this._usuarioService.getAdminByUsername(parseInt(idUsuario)).subscribe(response => {
+            this.listaUsuario = Object.values(response);
+          });
+          break;
+      }
+      
   }
 
 
   agregarUsuarios(){
-    var cad = separarURL(this._router);
-    switch(cad[1]){
+    var cad = getUsuario();
+    switch(cad){
       case 'usuarios':
         alert("no tienes un rol autorizado");
-        this._router.navigateByUrl('/dashboard/'+cad[1]+'/'+cad[0]);
+        this._router.navigateByUrl('/dashboard');
         break;
       case 'supervisores':
-        this._router.navigateByUrl('/dashboard/'+cad[1]+'/'+cad[0]+'/formulario');
+        this._router.navigateByUrl('/dashboard/'+'formulario');
         break;
       case 'administradores':
-        this._router.navigateByUrl('/dashboard/'+cad[1]+'/'+cad[0]+'/formulario');
+        this._router.navigateByUrl('/dashboard/'+'formulario');
         break;
     }
   }
 
 
   editarPerfil(){
-    var cad = separarURL(this._router);
-    switch (cad[1]){
+    var cad = getUsuario();
+    switch (cad){
       case 'usuarios':
         alert("No tienes un rol autorizado");
-        this._router.navigateByUrl('/dashboard/'+cad[1]+'/'+cad[0]);
+        this._router.navigateByUrl('/dashboard');
         break;
       case 'supervisores':
-        this._router.navigateByUrl('/dashboard/'+cad[1]+'/'+cad[0]+'/perfil/editar-perfil');
+        this._router.navigateByUrl('/editar-perfil');
         break;
       case 'administradores':
-        this._router.navigateByUrl('/dashboard/'+cad[1]+'/'+cad[0]+'/perfil/editar-perfil');
+        this._router.navigateByUrl('/editar-perfil');
         break;
     }
   }
   
 
   verListaUsuarios(){
-    var cad = separarURL(this._router);
-    switch (cad[1]){
+    var cad = getUsuario();
+    switch (cad){
       case 'usuarios':
         alert("No tienes un rol autorizado");
-        this._router.navigateByUrl('/dashboard/'+cad[1]+'/'+cad[0]);
+        this._router.navigateByUrl('/dashboard');
         break;
       case 'supervisores':
-        this._router.navigateByUrl('/dashboard/'+cad[1]+'/'+cad[0]+'/lista-usuarios');
+        this._router.navigateByUrl('/dashboard'+'/lista-usuarios');
         break;
       case 'administradores':
-        this._router.navigateByUrl('/dashboard/'+cad[1]+'/'+cad[0]+'/lista-usuarios');
+        this._router.navigateByUrl('/dashboard'+'/lista-usuarios');
         break;
     }
+  }
+
+  verEditarPerfil(){
+    var cad = getUsuario();
+    switch (cad){
+      case 'usuarios':
+        alert("No tienes un rol autorizado");
+        this._router.navigateByUrl('/dashboard');
+        break;
+      case 'supervisores':
+        this._router.navigateByUrl('/editar-perfil');
+        break;
+      case 'administradores':
+        this._router.navigateByUrl('/editar-perfil');
+        break;
+    }
+  }
+
+  getRolUser(): String { 
+    return getUsuario();
+  }
+
+  getName(): String {
+    let rolUsuario = getUsuario();
+    let idUsuario = getId();
+    var name = '';
+    switch(rolUsuario){
+      case 'usuarios':
+        this._usuarioService.getUserByUsername(parseInt(idUsuario)).subscribe(response => {
+          this.listaUsuario = Object.values(response);
+           name = String(this.listaUsuario[3]);
+        });
+        break;
+      case 'supervisores':
+        this._usuarioService.getSuperUserByUsername(parseInt(idUsuario)).subscribe(response => {
+          this.listaUsuario = Object.values(response);
+          name =  String(this.listaUsuario[3]);
+        });
+        break;
+      case 'administradores':
+        this._usuarioService.getAdminByUsername(parseInt(idUsuario)).subscribe(response => {
+          this.listaUsuario = Object.values(response);
+          name =  String(this.listaUsuario[3]);
+        });
+        break;
+    }
+
+    return name;
   }
 
   
-
-  getUsuarioLog(): void {
-    var cad = separarURL(this._router);
-    switch (cad[1]){
-      case 'usuarios':
-        this._usuarioService.getUserByUsername(parseInt(cad[0])).subscribe(response => {
-          this.usuarios = response.usuarios;
-        });
-        break;
-      case 'supervisores':
-        this._usuarioService.getSuperUserByUsername(parseInt(cad[0])).subscribe(response =>{
-          this.usuarios = response.usuarios;
-        });
-        break;
-      case 'administradores':
-        this._usuarioService.getAdminByUsername(parseInt(cad[0])).subscribe(response =>{
-          this.usuarios = response.usuarios;
-        });
-        break;
-    }
-  }
-
-
-  getDatosUser(){
-    var cad = separarURL(this._router);
-    //cad[0] => id 
-    //cad[1] => rol
-    console.log(cad[0]);
-    switch (cad[1]) {
-      case 'usuarios':
-        this._usuarioService.getUserByUsername(parseInt(cad[0])).subscribe(response => {
-          this.usuarios = response.usuarios;
-          this.variable = response;
-          
-          let datos = separarComas(JSON.stringify(this.variable));
-          console.log(this.variable);
-          console.log(datos[0]);
-          console.log(devuelvoDatos(datos[0]));
-          let misDatos = devuelvoDatos(datos[0]);
-          this.usuarios.firstname = misDatos[0];
-        });
-        break;
-      case 'supervisores':
-        this._usuarioService.getSuperUserByUsername(parseInt(cad[0])).subscribe(response =>{
-          this.usuarios = response.usuarios;
-         
-          console.log(response);
-        })
-        break;
-      case 'administradores':
-        this._usuarioService.getAdminByUsername(parseInt(cad[0])).subscribe(response =>{
-          this.usuarios = response.usuarios;
-        })
-        break;
-    }
-  }
-
 
   rutaUser(): boolean{
     let isUser: boolean = false;
@@ -208,6 +209,18 @@ export class DashboardComponent implements OnInit {
 
 }
 
+function getUsuario():string{
+ return decMD5(String(localStorage.getItem('usuario')));
+}
+
+function getId():string{
+  return decMD5(String(localStorage.getItem('idUsuario')));
+}
+
+
+function decMD5(cad:any){
+  return decodeURIComponent(escape(window.atob(cad)));
+}
 
 function separarURL(_router: Router) {
     let direccion = _router.url;
