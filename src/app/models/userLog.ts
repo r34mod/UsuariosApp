@@ -1,6 +1,6 @@
 export class UserLog{
     constructor(
-        public id: number,
+        public id: string,
         public password: string,
         public role: string
 

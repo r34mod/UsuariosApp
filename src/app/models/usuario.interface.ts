@@ -1,16 +1,7 @@
-export type Roles = 'usuario' | 'supervisor' | 'administrador';
-
-export interface User{
-   
+export interface ListaUsuarios{
+    id: number;
+    firstname: string;
     username: string;
-   
-    password: string;
-}
-
-
-export interface UserResponse{
-    message: string;
-    token: string;
-    userId: number;
-    rol: Roles;
+    rol: string;
+    departmento: string;
 }

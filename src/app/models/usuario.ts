@@ -1,7 +1,7 @@
 export class Usuario{
     constructor(
-        public id_super: number,
-        public _id: number,
+        public id_super: string,
+        public _id: string,
         public username: string,
         public firstname: string,
         public rol: string,
