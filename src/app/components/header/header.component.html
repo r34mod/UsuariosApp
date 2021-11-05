@@ -1,5 +1,5 @@
 <div class="wrapper"></div>
-  <nav>
+  <nav *ngIf="logueado()===false">
     <div class="logo">
       <img src="https://www.kindpng.com/picc/m/163-1636340_user-avatar-icon-avatar-transparent-user-icon-png.png" alt="Logo" class="app-logo"> 
     </div>
@@ -12,11 +12,32 @@
 
       </li>
       <li>
-          <a [routerLink]="['/dashboard/usuarios/0']" [routerLinkActive]="['active']">Dashboard</a>
+          <a [routerLink]="['/dashboard']" [routerLinkActive]="['active']">Dashboard</a>
       </li>
-      <li><a [routerLink]="['/']" [routerLinkActive]="['active']">Log Out</a></li>
+      <li><a (click)="logOut()">Log Out</a></li>
       <li>
           <a [routerLink]="['/login']" [routerLinkActive]="['active']">Log In</a>
+      </li>
+    </ul>
+  </nav>
+  <nav *ngIf="logueado()===true">
+    <div class="logo">
+      <img src="https://www.kindpng.com/picc/m/163-1636340_user-avatar-icon-avatar-transparent-user-icon-png.png" alt="Logo" class="app-logo"> 
+    </div>
+    <div class="menu">
+      <div class="burger"></div>
+    </div>
+    <ul class="navList">
+      <li>
+          <a [routerLink]="['/']" [routerLinkActive]="['active']">Inicio</a>
+
+      </li>
+      <li>
+          <a [routerLink]="['/dashboard']" [routerLinkActive]="['active']">Dashboard</a>
+      </li>
+      <li><a (click)="logOut()">Log Out</a></li>
+      <li>
+        <a [routerLink]="['/dashboard/perfil']" [routerLinkActive]="['active']">Perfil</a>
       </li>
     </ul>
   </nav>
