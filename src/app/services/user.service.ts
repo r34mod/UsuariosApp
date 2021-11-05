@@ -6,6 +6,7 @@ import { Usuario } from '../models/usuario';
 import { User } from '../models/user';
 import { Global } from '../data/services/global';
 import { CookieService } from 'ngx-cookie-service';
+import { ListaUsuarios } from '../models/usuario.interface'; 
 
 @Injectable()
 export class UsuarioService{
@@ -19,9 +20,7 @@ export class UsuarioService{
         this.url = Global.url;
     }
 
-    login(role: any, id: any): Observable<any>{
-        return this._http.get(this.url + role +'/'+id);
-    }
+    
 
     setToken(token: any){
         this.cookies.set("token", token);
@@ -36,6 +35,9 @@ export class UsuarioService{
     }
     
 
+    devolverRol(role: any){
+        return role;
+    }
     //OBTENER LISTAS DE USUARIOS
     
 
@@ -43,16 +45,16 @@ export class UsuarioService{
         return this._http.get<User[]>(this.url +'usuarios');
     }
 
-    getAllUsers(): Observable<any>{
-        return this._http.get('http://localhost:8080/usuarios');
+    getAllUsers(): Observable<ListaUsuarios[]>{
+        return this._http.get<ListaUsuarios[]>('http://localhost:8080/usuarios');
     }
 
-    getSupervisores(): Observable<any>{
-        return this._http.get(this.url + 'supervisores');
+    getSupervisores(): Observable<ListaUsuarios[]>{
+        return this._http.get<ListaUsuarios[]>('http://localhost:8080/supervisores');
     }
 
-    getAdministrador(): Observable<any>{
-        return this._http.get(this.url + 'administradores');
+    getAdministrador(): Observable<ListaUsuarios[]>{
+        return this._http.get<ListaUsuarios[]>('http://localhost:8080/administradores');
     }
 
 
@@ -109,11 +111,11 @@ export class UsuarioService{
         return this._http.get(this.url + 'administradores/'+id);
     }
 
-    getUserByUsername(id:number): Observable<any>{
-        return this._http.get(this.url + 'usuarios/'+id)
+    getUserByUsername(id:number): Observable<ListaUsuarios[]>{
+        return this._http.get<ListaUsuarios[]>(this.url + 'usuarios/'+id)
     }
 
-    getSuperUserByUsername(id:number): Observable<any>{
-        return this._http.get(this.url + 'supervisores/'+id);
+    getSuperUserByUsername(id:number): Observable<ListaUsuarios[]>{
+        return this._http.get<ListaUsuarios[]>(this.url + 'supervisores/'+id);
     }
 }
