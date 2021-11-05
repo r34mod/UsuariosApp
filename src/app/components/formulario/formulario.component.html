@@ -1,30 +1,22 @@
 <div class="center">
-    <form class="box" #usuarioForm="ngForm" (ngSubmit)="onSubmit()">
+    <form class="box" #editForm="ngForm" (ngSubmit)="onSubmit()">
         <h1>Agregar usuario</h1>
         <div>
-            <input type="text" placeholder="id" #id="ngModel" [(ngModel)]="usuario._id" name="usuarioID">
+            <input type="text" placeholder="id" [(ngModel)]="usuarioMod._id" [ngModelOptions]="{standalone: true}">
         </div>
         <div>
-            <input type="text" placeholder="id_superior" #id_superior="ngModel" [(ngModel)]="usuario.id_super" name="superior">
+            <input type="text" placeholder="id_superior" [(ngModel)]="usuarioMod.id_super" [ngModelOptions]="{standalone: true}">
         </div>
         
         
-        <input type="text" placeholder="Nombre" #nombre="ngModel" [(ngModel)]="usuario.firstname" name="nombre">
-        <input type="text" placeholder="username" #username="ngModel" [(ngModel)]="usuario.username" name="username">
-        <input type="text" placeholder="email" #email="ngModel" [(ngModel)]="usuario.email" name="email">
-        <input type="password" placeholder="password" #password="ngModel" [(ngModel)]="usuario.password" name="password">
-        <input type="text" placeholder="departamento" #departamento="ngModel" [(ngModel)]="usuario.department" name="departamento">
-        <!--<select type="op">
-            <option value="usuario" name="rol" #rol="ngModel" [(ngModel)]="usuario.rol">usuario</option>
-            <option value="supervisor" name="rol" #rol="ngModel" [(ngModel)]="usuario.rol">supervisor</option>
-            <option value="administrator" name="rol" #rol="ngModel" [(ngModel)]="usuario.rol">administrator</option>
-        </select>-->
-        <div class="opciones">
-            <input type="radio" name="rol" value="usuarios" #rol="ngModel" [(ngModel)]="usuario.rol" required/> User <br>
-            <input type="radio" name="rol" value="supervisores" #rol="ngModel" [(ngModel)]="usuario.rol"/> Super <br>
-            <input type="radio" name="rol" value="administratores" #rol="ngModel" [(ngModel)]="usuario.rol"/> Admin
-
-        </div>
+        <input type="text" placeholder="Nombre" [(ngModel)]="usuarioMod.firstname" [ngModelOptions]="{standalone: true}">
+        <input type="text" placeholder="username" [(ngModel)]="usuarioMod.username" [ngModelOptions]="{standalone: true}">
+        <input type="text" placeholder="email" [(ngModel)]="usuarioMod.email" [ngModelOptions]="{standalone: true}">
+        <input type="password" placeholder="password" [(ngModel)]="usuarioMod.password" [ngModelOptions]="{standalone: true}">
+        <input type="text" placeholder="departamento" [(ngModel)]="usuarioMod.department" [ngModelOptions]="{standalone: true}">
+        <input type="text" placeholder="rol" [(ngModel)]="usuarioMod.rol" [ngModelOptions]="{standalone: true}">
+        
         <input type="submit" value="Agregar">
+        <button class="boton" (click)="atras()">Atras</button>
     </form>
     </div>
