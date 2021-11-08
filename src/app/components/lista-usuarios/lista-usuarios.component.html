@@ -16,7 +16,10 @@
                   <th>Nombre</th>
                   <th>ROL</th>
                   <th>USERNAME</th>
+                  <th>EMAIL</th>
                   <th>DEPARTAMENTO</th>
+                  <th>MOSTRAR</th>
+                  <th>ELIMINAR</th>
                 </tr>
 
               </thead>
@@ -28,7 +31,10 @@
                   <td>{{user.firstname}}</td>
                   <td>{{user.rol}}</td>
                   <td>{{user.username}}</td>
+                  <td>{{user.email}}</td>
                   <td>{{user.departmento}}</td>
+                  <td><button><a (click)="mostrarPerfil(user.id)">Mostrar Perfil</a></button></td>
+                  <td><button><a (click)="delete(user.id)">Eliminar</a></button></td>
                 </tr>
             </tbody>
         </table>
