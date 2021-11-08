@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+*, 
+::before, 
+::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body 
+{
+    background-color: white;
+    color: black;
+    font-family: 'Noto Sans JP', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+img {
+    height: 100vh;
+    width: 100vw;
+}
+
+.logo {
+    width: 20px;
+    height: 20px;
+}
+
+button {
+    border: none; 
+    padding: 12px 20px;
+    background-color: rgba( 255, 255, 255, 0.65);
+    border-radius: 10px;
+    filter: drop-shadow(2px 2px 6px rgba(163, 163, 163, 0.6));
+    margin-top: 5px;
+}
+
+a {
+    color: purple;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: 'Noto Sans JP', sans-serif;
+    text-decoration: none;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 290px;
+    height: 550px;
+    background: rgba( 255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur(5.5px );
+    -webkit-backdrop-filter: blur( 11.5px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    position: absolute;
+}
+
+.card-img {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    border: 3px solid white;
+    filter: drop-shadow(2px 2px 6px rgba(163, 163, 163, 0.6));
+
+}
+
+.card-title {
+    font-family: sans-serif;
+    position: relative;
+    top: -5px;
+}
+
+.card-subtitle {
+    position: relative;
+    top: -20px;
+}
+
+.logos-container {
+    position: relative;
+    top: -20px;
+}
+
+.logo {
+    height: 25px;
+    width: 25px;
+    margin-right: 8px; 
+}
+
+.logo:last-child {
+    margin-right: 0;
+}
